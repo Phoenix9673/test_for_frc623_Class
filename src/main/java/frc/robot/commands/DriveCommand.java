@@ -33,8 +33,7 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.arcadeDrive(.7, 0);
-    
+    m_subsystem.arcadeDrive(m_pid.calculate(m_subsystem.getAverageDistanceInch()), 0);
   }
 
   // Called once the command ends or is interrupted.
