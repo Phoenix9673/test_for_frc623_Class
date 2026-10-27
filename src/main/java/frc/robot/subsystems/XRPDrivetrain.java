@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.xrp.XRPGyro;
 import edu.wpi.first.wpilibj.xrp.XRPMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -40,7 +42,7 @@ public class XRPDrivetrain extends SubsystemBase {
     // Invert right side since motor is flipped
     m_rightMotor.setInverted(true);
   }
-
+  
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
     m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
   }
@@ -49,7 +51,15 @@ public class XRPDrivetrain extends SubsystemBase {
     m_leftEncoder.reset();
     m_rightEncoder.reset();
   }
+  private final XRPGyro gyro = new XRPGyro();
 
+  public void reset2(){
+    gyro.reset();
+  }
+
+  public double getAngleZ2(){
+    return gyro.getAngleZ();
+  } 
   public double getLeftDistanceInch() {
     return m_leftEncoder.getDistance();
   }
@@ -57,10 +67,13 @@ public class XRPDrivetrain extends SubsystemBase {
   public double getRightDistanceInch() {
     return m_rightEncoder.getDistance();
   }
-
+  
+  public double getAverageDistanceInch() {
+    return (getLeftDistanceInch() + getRightDistanceInch()) / 2.0;
+  }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Average Distance (in)", getAverageDistanceInch());
   }
 
   @Override
