@@ -6,11 +6,13 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.XRPDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.math.controller.PIDController;
 /** An example command that uses an example subsystem. */
 public class DriveCommand extends Command {
   @SuppressWarnings("PMD.UnusedPrivateField")
+
   private final XRPDrivetrain m_subsystem;
+  private final PIDController m_pid = new PIDController(.03, 0, 0);
 
   public DriveCommand(XRPDrivetrain subsystem) {
     m_subsystem = subsystem;
@@ -23,12 +25,16 @@ public class DriveCommand extends Command {
   @Override
   public void initialize() {
     m_subsystem.resetEncoders();
+    m_pid.reset();
+    m_pid.setTolerance(.5);
   }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_subsystem.arcadeDrive(.7, 0);
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -40,9 +46,6 @@ public class DriveCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_subsystem.getAverageDistanceInch() >= 60) { // Example distance threshold
-      return true;
-    }
-    return false;
+    return m_pid.atSetpoint(); // Stop after 60 inches
   }
 }
