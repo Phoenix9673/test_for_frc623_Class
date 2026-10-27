@@ -12,7 +12,7 @@ public class DriveCommand extends Command {
   @SuppressWarnings("PMD.UnusedPrivateField")
 
   private final XRPDrivetrain m_subsystem;
-  private final PIDController m_pid = new PIDController(.03, 0, 0);
+  private final PIDController m_pid = new PIDController(.1, 0, 0);
 
   public DriveCommand(XRPDrivetrain subsystem) {
     m_subsystem = subsystem;
@@ -26,7 +26,8 @@ public class DriveCommand extends Command {
   public void initialize() {
     m_subsystem.resetEncoders();
     m_pid.reset();
-    m_pid.setTolerance(.5);
+    m_pid.setTolerance(.3);
+    m_pid.setSetpoint(24); // Example setpoint
   }
 
 
